@@ -13,6 +13,7 @@ import * as myship from './myship.js';
 import * as enemies from './enemies.js';
 import * as effectobj from './effectobj.js';
 import EventEmitter from './eventEmitter3.js';
+import {seqData,soundEffectData} from './seqData.js';
 
 
 class ScoreEntry {
@@ -118,8 +119,7 @@ export class Game {
     }
 
     this.sequencer = new audio.Sequencer(this.audio_);
-    //piano = new audio.Piano(audio_);
-    this.soundEffects = new audio.SoundEffects(this.sequencer);
+    this.soundEffects = new audio.SoundEffects(this.sequencer,soundEffectData);
 
     document.addEventListener(window.visibilityChange, this.onVisibilityChange.bind(this), false);
     sfg.setGameTimer(new util.GameTimer(this.getCurrentTime.bind(this)));
@@ -315,7 +315,7 @@ export class Game {
     };
     /// テクスチャーのロード
   
-    var loadPromise = Promise.resolve();
+    var loadPromise = this.audio_.readDrumSample;
     var loader = new THREE.TextureLoader();
     function loadTexture(src) {
       return new Promise((resolve, reject) => {
@@ -764,6 +764,7 @@ printScore() {
 
 /// サウンドエフェクト
 se(index) {
+  console.log(index);
   this.sequencer.playTracks(this.soundEffects.soundEffects[index]);
 }
 
@@ -775,7 +776,7 @@ se(index) {
 
   // オーディオの開始
   this.audio_.start();
-  this.sequencer.load(audio.seqData);
+  this.sequencer.load(seqData);
   this.sequencer.start();
   sfg.stage.reset();
   this.textPlane.cls();

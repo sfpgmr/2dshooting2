@@ -2,7 +2,7 @@
 
 export class Comm {
   constructor(){
-    var host = window.location.hostname.match(/www\.sfpgmr\.net/ig)?'www.sfpgmr.net':'localhost';
+    var host = window.location.hostname.match(/\.sfpgmr\.net/ig)?'www.sfpgmr.net':'localhost';
     this.enable = false;
     try {
       this.socket = io.connect(window.location.protocol + '//' + host + ':8081/test');
@@ -34,7 +34,7 @@ export class Comm {
       });
 
     } catch (e) {
-      alert('Socket.IOが利用できないため、ハイスコア情報が取得できません。' + e);
+      //alert('Socket.IOが利用できないため、ハイスコア情報が取得できません。' + e);
     }
   }
   
