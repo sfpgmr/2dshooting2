@@ -2,10 +2,10 @@
 
 export class Comm {
   constructor(){
-    var host = window.location.hostname.match(/\.sfpgmr\.net/ig)?'www.sfpgmr.net':'localhost';
+    var host = window.location.href.match(/\.sfpgmr\.net/ig)?'www.sfpgmr.net':'localhost';
     this.enable = false;
     try {
-      this.socket = io.connect(window.location.protocol + '//' + host + ':8081/test');
+      this.socket = io.connect('http://' + host + ':8081/test');
       this.enable = true;
       var self = this;
       this.socket.on('sendHighScores', (data)=>{

@@ -34,7 +34,7 @@ gulp.task('js',function(){
     bundle.write({
       format: 'iife',
       dest: './dist/js/bundle.js',
-            sourceMap: 'inline'
+      sourceMap: 'inline'
     });
   });
 //     browserify('./src/js/main.js',{debug:true,extensions: ['.js']})
