@@ -1,9 +1,8 @@
 'use strict';
 
-var app = require('app');
-var BrowserWindow = require('browser-window');
+const {app,BrowserWindow} = require('electron');
 
-require('crash-reporter').start();
+//require('crash-reporter').start();
 
 var mainWindow = null;
 

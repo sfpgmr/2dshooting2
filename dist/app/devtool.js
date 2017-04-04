@@ -1,6 +1,6 @@
 "use strict";
-import * as sfg from './global';
-import * as audio from './audio';
+import * as sfg from './global.js';
+import * as audio from './audio.js';
 
 
 export class DevTool {
