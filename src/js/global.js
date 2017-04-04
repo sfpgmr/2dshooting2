@@ -22,9 +22,9 @@ export var gameTimer = null;
 export var bombs = null;
 export var addScore = null;
 export var myship_ = null;
-export var textureRoot = './res/';
 export var pause = false;
 export var game = null;
+export var resourceBase = '';
 
 export function setGame(v){game = v;}
 export function setPause(v){pause = v;}
@@ -34,4 +34,5 @@ export function setBombs(v){bombs = v;}
 export function setGameTimer(v){gameTimer = v;}
 export function setTasks(v){tasks = v;}
 export function setStage(v){stage = v;}
+export function setResourceBase(v){resourceBase = v;}
 

@@ -16,7 +16,14 @@ import { Game } from './game.js';
 
 /// メイン
 window.onload = function () {
-
+  let reg = new RegExp('(.*\/)');
+  let r = reg.exec(window.location.href);
+  let root = r[1];
+  if(window.location.href.match(/devver/)){
+    sfg.setResourceBase('../../dist/res/');
+  } else {
+    sfg.setResourceBase('./res/');
+  }
   sfg.setGame(new Game());
   sfg.game.exec();
 };

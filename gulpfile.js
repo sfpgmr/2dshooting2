@@ -159,8 +159,14 @@ gulp.task('devhtml',function(){
 
 //リソースのコピー
 gulp.task('res',function(){
-  gulp.src('./src/res/*.json').pipe(gulp.dest('./dist/res'));
-  gulp.src('./src/res/*.json').pipe(gulp.dest('./dist/app/res'));
+  gulp.src('./src/res/**').pipe(gulp.dest('./dist/res'));
+  gulp.src('./src/res/**').pipe(gulp.dest('./dist/app/res'));
+});
+
+//dataのコピー
+gulp.task('data',function(){
+  gulp.src('./src/data/*.json').pipe(gulp.dest('./dist/data'));
+  gulp.src('./src/data/*.json').pipe(gulp.dest('./dist/app/data'));
 });
 
 // devverディレクトリへのコピー
@@ -176,14 +182,15 @@ gulp.task('devver',function(){
   
   try {
     fs.mkdirSync(destdir + '/js');
-    fs.mkdirSync(destdir + '/res');
+    fs.mkdirSync(destdir + '/data');
+    fs.mkdirSync(destdir + '/css');
   } catch (e){
     
   }
   
   gulp.src('./dist/*.html').pipe(gulp.dest(destdir));
   gulp.src('./dist/js/*.js').pipe(gulp.dest(destdir + '/js'));
-  gulp.src('./dist/res/*.json').pipe(gulp.dest(destdir + '/res'));
+  gulp.src('./dist/data/*.json').pipe(gulp.dest(destdir + '/data'));
   gulp.src('./dist/css/*.*').pipe(gulp.dest(destdir + '/css'));
 });
 
@@ -209,10 +216,10 @@ gulp.task('devapp',()=>{
   gulp.src('./src/app/*.js').pipe(gulp.dest('./dist/app'));
 });
 
-gulp.task('default',['html','devhtml','js','devjs','res','postcss','devapp','browser-sync'],function(){
+gulp.task('default',['html','devhtml','js','devjs','res','data','postcss','devapp','browser-sync'],function(){
     watch('./src/js/**/*.js',()=>gulp.start(['js'],['devjs']));
     watch('./src/html/*.html',()=>gulp.start(['html']));
-    watch('./src/res/**/*.json',()=>gulp.start(['res']));
+    watch('./src/data/**/*.json',()=>gulp.start(['data']));
     watch('./src/css/**/*.css',()=>gulp.start(['postcss']));
     watch('./dist/**/*.*',()=>gulp.start(['bs-reload']));
     watch('./src/app/js/*.js',()=>gulp.start(['devjs']));

@@ -305,13 +305,13 @@ export class Game {
   loadResources() {
     /// ゲーム中のテクスチャー定義
     var textures = {
-      font: 'Font.png',
-      font1: 'Font2.png',
-      author: 'author.png',
-      title: 'TITLE.png',
-      myship: 'myship2.png',
-      enemy: 'enemy.png',
-      bomb: 'bomb.png'
+      font: 'base/graphic/Font.png',
+      font1: 'base/graphic/Font2.png',
+      author: 'base/graphic/author.png',
+      title: 'base/graphic/TITLE.png',
+      myship: 'base/graphic/myship2.png',
+      enemy: 'base/graphic/enemy.png',
+      bomb: 'base/graphic/bomb.png'
     };
     /// テクスチャーのロード
   
@@ -337,7 +337,7 @@ export class Game {
       ((name, texPath) => {
         loadPromise = loadPromise
           .then(() => {
-            return loadTexture('./res/' + texPath);
+            return loadTexture(sfg.resourceBase + texPath);
           })
           .then((tex) => {
             texCount++;
@@ -764,7 +764,6 @@ printScore() {
 
 /// サウンドエフェクト
 se(index) {
-  console.log(index);
   this.sequencer.playTracks(this.soundEffects.soundEffects[index]);
 }
 

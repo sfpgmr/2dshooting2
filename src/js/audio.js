@@ -9,6 +9,7 @@ import Scanner from "./Scanner.js";
 import MMLParser from "./MMLParser.js";
 import DefaultParams from "./DefaultParams.js";
 import lzbase62 from "./lzbase62.min.js";
+import * as sfg from './global.js';
 
 // var fft = new FFT(4096, 44100);
 const BUFFER_SIZE = 1024;
@@ -138,22 +139,22 @@ function createPeriodicWaveFromWaves(audioctx) {
 // ドラムサンプル
 
 const drumSamples = [
-  { name: 'bass1', path: 'bd1_lz.json' }, // @9
-  { name: 'bass2', path: 'bd2_lz.json' }, // @10
-  { name: 'closed', path: 'closed_lz.json' }, // @11
-  { name: 'cowbell', path: 'cowbell_lz.json' },// @12
-  { name: 'crash', path: 'crash_lz.json' },// @13
-  { name: 'handclap', path: 'handclap_lz.json' }, // @14
-  { name: 'hitom', path: 'hitom_lz.json' },// @15
-  { name: 'lowtom', path: 'lowtom_lz.json' },// @16
-  { name: 'midtom', path: 'midtom_lz.json' },// @17
-  { name: 'open', path: 'open_lz.json' },// @18
-  { name: 'ride', path: 'ride_lz.json' },// @19
-  { name: 'rimshot', path: 'rimshot_lz.json' },// @20
-  { name: 'sd1', path: 'sd1_lz.json' },// @21
-  { name: 'sd2', path: 'sd2_lz.json' },// @22
-  { name: 'tamb', path: 'tamb_lz.json' },// @23
-  { name:'voice',path: 'movie_lz.json'}// @24
+  { name: 'bass1', path: 'base/audio/bd1_lz.json' }, // @9
+  { name: 'bass2', path: 'base/audio/bd2_lz.json' }, // @10
+  { name: 'closed', path: 'base/audio/closed_lz.json' }, // @11
+  { name: 'cowbell', path: 'base/audio/cowbell_lz.json' },// @12
+  { name: 'crash', path: 'base/audio/crash_lz.json' },// @13
+  { name: 'handclap', path: 'base/audio/handclap_lz.json' }, // @14
+  { name: 'hitom', path: 'base/audio/hitom_lz.json' },// @15
+  { name: 'lowtom', path: 'base/audio/lowtom_lz.json' },// @16
+  { name: 'midtom', path: 'base/audio/midtom_lz.json' },// @17
+  { name: 'open', path: 'base/audio/open_lz.json' },// @18
+  { name: 'ride', path: 'base/audio/ride_lz.json' },// @19
+  { name: 'rimshot', path: 'base/audio/rimshot_lz.json' },// @20
+  { name: 'sd1', path: 'base/audio/sd1_lz.json' },// @21
+  { name: 'sd2', path: 'base/audio/sd2_lz.json' },// @22
+  { name: 'tamb', path: 'base/audio/tamb_lz.json' },// @23
+  { name:'voice',path: 'base/audio/movie_lz.json'}// @24
 ];
 
 let xhr = new XMLHttpRequest();
@@ -173,14 +174,10 @@ function json(url) {
 }
 
 function readDrumSample(audioctx) {
-  let reg = new RegExp('(.*\/)');
-  let r = reg.exec(window.location.href);
-  let pr = Promise.resolve(0);console.log(r[1],window.location.href);
-//  let srcUrl = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/res/audio/`;
-  let srcUrl = r[1] + 'res/audio/';
+  let pr = Promise.resolve(0);
   drumSamples.forEach((d) => {
     pr =
-      pr.then(json.bind(null, srcUrl + d.path))
+      pr.then(json.bind(null,sfg.resourceBase + d.path))
         .then(data => {
           let sampleStr = lzbase62.decompress(data.samples);
           let samples = decodeStr(4, sampleStr);
