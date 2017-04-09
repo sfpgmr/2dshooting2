@@ -1,0 +1,35 @@
+/*							Parts Assembler
+                                  Version 2.04.080624(:
+Parts: 
+	F1\F109.suf
+	W1\W102.suf
+	W1\W112.suf
+Info:
+	DisplayOffset: (   0.000   0.000   0.000 )
+	DisplayScale: 0.353553390593
+	MeshFlag: 1
+	MeshSpacing: 200
+	ShowStatus: 1
+	GridFlag: 1
+	GridSpacing: 50
+	RotSpacing: 10
+	SelectedOnly: 0
+*/
+fram
+{
+	light pal( rgb ( 1.00 1.00 1.00 )  28 -64  70 )
+	{	mov ( -1634.25 623.076 -31.6356 ) eye deg( 60 ) }
+	{	mov ( 0 0 0 ) target }
+{	mov ( 0 0 0 ) rotz ( 0 ) roty ( 0 ) rotx ( 0 )
+	scal ( 1 1 1 ) obj F109 /* "F1\F109.suf" */
+}
+{	mov ( -100 -50 0 ) rotz ( 0 ) roty ( 0 ) rotx ( 0 )
+	scal ( 1 1 1 ) obj W102 /* "W1\W102.suf" */
+}
+{	mov ( -100 100 0 ) rotz ( 180 ) roty ( 0 ) rotx ( 0 )
+	scal ( -1 1 1 ) obj W102 /* "W1\W102.suf" */
+}
+{	mov ( -300 0 0 ) rotz ( 0 ) roty ( 0 ) rotx ( 0 )
+	scal ( 1 1 0.5 ) obj W112 /* "W1\W112.suf" */
+}
+}
