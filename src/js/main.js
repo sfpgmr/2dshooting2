@@ -1,6 +1,6 @@
 "use strict";
 //var STAGE_MAX = 1;
-import * as sfg from './global.js'; 
+import sfg from './global.js'; 
 // import * as util from './util.js';
 // import * as audio from './audio.js';
 // //import * as song from './song';
@@ -20,10 +20,10 @@ window.onload = function () {
   let r = reg.exec(window.location.href);
   let root = r[1];
   if(window.location.href.match(/devver/)){
-    sfg.setResourceBase('../../dist/res/');
+    sfg.resourceBase = '../../dist/res/';
   } else {
-    sfg.setResourceBase('./res/');
+    sfg.resourceBase = './res/';
   }
-  sfg.setGame(new Game());
+  sfg.game = new Game();
   sfg.game.exec();
 };

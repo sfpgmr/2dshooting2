@@ -1,5 +1,5 @@
 "use strict";
-import * as sfg from './global.js'; 
+import sfg from './global.js'; 
 //import *  as gameobj from './gameobj';
 //import * as graphics from './graphics';
 

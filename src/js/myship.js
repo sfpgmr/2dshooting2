@@ -1,6 +1,6 @@
 "use strict";
 
-import * as sfg from './global.js'; 
+import sfg from './global.js'; 
 import * as gameobj from './gameobj.js';
 import * as graphics from './graphics.js';
 
@@ -91,8 +91,8 @@ export class MyShip extends gameobj.GameObj {
   this.collisionArea.height = 8;
   this.se = se;
   this.scene = scene;
-  this.textureWidth = sfg.textureFiles.myship.image.width;
-  this.textureHeight = sfg.textureFiles.myship.image.height;
+  //this.textureWidth = sfg.textureFiles.myship.image.width;
+  //this.textureHeight = sfg.textureFiles.myship.image.height;
   this.width = 16;
   this.height = 16;
 
@@ -104,24 +104,26 @@ export class MyShip extends gameobj.GameObj {
 
   // メッシュの作成・表示
   // マテリアルの作成
-  var material = graphics.createSpriteMaterial(sfg.textureFiles.myship);
+  //var material = graphics.createSpriteMaterial(sfg.textureFiles.myship);
   // ジオメトリの作成
-  var geometry = graphics.createSpriteGeometry(this.width);
-  graphics.createSpriteUV(geometry, sfg.textureFiles.myship, this.width, this.height, 0);
+  //var geometry = graphics.createSpriteGeometry(this.width);
+  //graphics.createSpriteUV(geometry, sfg.textureFiles.myship, this.width, this.height, 0);
 
-  this.mesh = new THREE.Mesh(geometry, material);
+  //this.mesh = new THREE.Mesh(geometry, material);
+  this.mesh = sfg.game.meshMyShip;
+  this.bbox = new THREE.Box3();
 
   this.mesh.position.x = this.x_;
   this.mesh.position.y = this.y_;
   this.mesh.position.z = this.z_;
   this.rest = 3;
-  this.myBullets = ( ()=> {
-    var arr = [];
-    for (var i = 0; i < 2; ++i) {
-      arr.push(new MyBullet(this.scene,this.se));
-    }
-    return arr;
-  })();
+  // this.myBullets = ( ()=> {
+  //   var arr = [];
+  //   for (var i = 0; i < 2; ++i) {
+  //     arr.push(new MyBullet(this.scene,this.se));
+  //   }
+  //   return arr;
+  // })();
   scene.add(this.mesh);
   
   this.bulletPower = 1;
@@ -168,15 +170,15 @@ export class MyShip extends gameobj.GameObj {
     }
 
 
-    if (basicInput.z) {
-      basicInput.keyCheck.z = false;
-      this.shoot(0.5 * Math.PI);
-    }
+    // if (basicInput.z) {
+    //   basicInput.keyCheck.z = false;
+    //   this.shoot(0.5 * Math.PI);
+    // }
 
-    if (basicInput.x) {
-      basicInput.keyCheck.x = false;
-      this.shoot(1.5 * Math.PI);
-    }
+    // if (basicInput.x) {
+    //   basicInput.keyCheck.x = false;
+    //   this.shoot(1.5 * Math.PI);
+    // }
   }
   
   hit() {
@@ -195,10 +197,12 @@ export class MyShip extends gameobj.GameObj {
   
   init(){
       this.x = 0;
-      this.y = -100;
-      this.z = 0.1;
+//      this.y = -100;
+      this.y = 0;
+      this.z = 0;
       this.rest = 3;
       this.mesh.visible = true;
   }
 
 }
+

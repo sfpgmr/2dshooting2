@@ -1,5 +1,5 @@
 "use strict";
-import * as sfg from './global.js'; 
+import sfg from './global.js'; 
 
 // キー入力
 export class BasicInput{

@@ -9,7 +9,7 @@ import Scanner from "./Scanner.js";
 import MMLParser from "./MMLParser.js";
 import DefaultParams from "./DefaultParams.js";
 import lzbase62 from "./lzbase62.min.js";
-import * as sfg from './global.js';
+import sfg from './global.js'; 
 
 // var fft = new FFT(4096, 44100);
 const BUFFER_SIZE = 1024;
