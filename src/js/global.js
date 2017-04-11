@@ -40,13 +40,20 @@
 class sfglobal {
   constructor() {
     this.CAMERA_Z = 100.0;
-    this.VIRTUAL_WIDTH = 240;
-    this.VIRTUAL_HEIGHT = 320;
+    this.ANGLE_OF_VIEW  = 10.0;
+    this.VIRTUAL_WIDTH = 240.0;
+    this.VIRTUAL_HEIGHT = 320.0;
+    this.ACTUAL_HEIGHT = this.CAMERA_Z * Math.tan(this.ANGLE_OF_VIEW * Math.PI / 360) * 2;
+    this.ACTUAL_WIDTH = this.ACTUAL_HEIGHT * this.VIRTUAL_WIDTH / this.VIRTUAL_HEIGHT;
 
-    this.V_RIGHT = this.VIRTUAL_WIDTH / 2.0;
-    this.V_TOP = this.VIRTUAL_HEIGHT / 2.0;
-    this.V_LEFT = -1 * this.VIRTUAL_WIDTH / 2.0;
-    this.V_BOTTOM = -1 * this.VIRTUAL_HEIGHT / 2.0;
+    // this.V_RIGHT = this.VIRTUAL_WIDTH / 2.0;
+    // this.V_TOP = this.VIRTUAL_HEIGHT / 2.0;
+    // this.V_LEFT = -1 * this.VIRTUAL_WIDTH / 2.0;
+    // this.V_BOTTOM = -1 * this.VIRTUAL_HEIGHT / 2.0;
+    this.V_RIGHT = this.ACTUAL_WIDTH / 2.0;
+    this.V_TOP = this.ACTUAL_HEIGHT / 2.0;
+    this.V_LEFT = -1 * this.ACTUAL_WIDTH / 2.0;
+    this.V_BOTTOM = -1 * this.ACTUAL_HEIGHT / 2.0;
 
     this.CHAR_SIZE = 8;
     this.TEXT_WIDTH = this.VIRTUAL_WIDTH / this.CHAR_SIZE;

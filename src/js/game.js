@@ -199,8 +199,8 @@ export class Game {
     this.scene = new THREE.Scene();
 
     // カメラの作成
-    this.camera = new THREE.PerspectiveCamera(10.0, sfg.VIRTUAL_WIDTH / sfg.VIRTUAL_HEIGHT);
-    this.camera.position.z = 100.0;//sfg.VIRTUAL_HEIGHT / (Math.tan(2 * Math.PI * 5 / 360) * 2);//sfg.VIRTUAL_HEIGHT / 2;
+    this.camera = new THREE.PerspectiveCamera(sfg.ANGLE_OF_VIEW, sfg.VIRTUAL_WIDTH / sfg.VIRTUAL_HEIGHT);
+    this.camera.position.z = sfg.CAMERA_Z;//sfg.VIRTUAL_HEIGHT / (Math.tan(2 * Math.PI * 5 / 360) * 2);//sfg.VIRTUAL_HEIGHT / 2;
     this.camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     // ライトの作成

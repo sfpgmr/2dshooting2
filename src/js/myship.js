@@ -93,14 +93,6 @@ export class MyShip extends gameobj.GameObj {
   this.scene = scene;
   //this.textureWidth = sfg.textureFiles.myship.image.width;
   //this.textureHeight = sfg.textureFiles.myship.image.height;
-  this.width = 16;
-  this.height = 16;
-
-  // 移動範囲を求める
-  this.top = (sfg.V_TOP - this.height / 2) | 0;
-  this.bottom = (sfg.V_BOTTOM + this.height / 2) | 0;
-  this.left = (sfg.V_LEFT + this.width / 2) | 0;
-  this.right = (sfg.V_RIGHT - this.width / 2) | 0;
 
   // メッシュの作成・表示
   // マテリアルの作成
@@ -111,7 +103,18 @@ export class MyShip extends gameobj.GameObj {
 
   //this.mesh = new THREE.Mesh(geometry, material);
   this.mesh = sfg.game.meshMyShip;
-  this.bbox = new THREE.Box3();
+  let bbox = new THREE.Box3().setFromObject(this.mesh);
+  let d = bbox.getSize();
+
+  this.width = 0;
+  this.height = 0;
+
+  // 移動範囲を求める
+  this.top = (sfg.V_TOP - this.height / 2) | 0;
+  this.bottom = (sfg.V_BOTTOM + this.height / 2) | 0;
+  this.left = (sfg.V_LEFT + this.width / 2) | 0;
+  this.right = (sfg.V_RIGHT - this.width / 2) | 0;
+
 
   this.mesh.position.x = this.x_;
   this.mesh.position.y = this.y_;
@@ -147,25 +150,25 @@ export class MyShip extends gameobj.GameObj {
   action(basicInput) {
     if (basicInput.left) {
       if (this.x > this.left) {
-        this.x -= 2;
+        this.x -= 0.15;
       }
     }
 
     if (basicInput.right) {
       if (this.x < this.right) {
-        this.x += 2;
+        this.x += 0.15;
       }
     }
 
     if (basicInput.up) {
       if (this.y < this.top) {
-        this.y += 2;
+        this.y += 0.15;
       }
     }
 
     if (basicInput.down) {
       if (this.y > this.bottom) {
-        this.y -= 2;
+        this.y -= 0.15;
       }
     }
 

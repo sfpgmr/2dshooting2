@@ -55,11 +55,12 @@ export class TextPlane{
   this.texture.minFilter = THREE.LinearMipMapLinearFilter;
   this.material = new THREE.MeshBasicMaterial({ map: this.texture,alphaTest:0.5, transparent: true,depthTest:true,shading:THREE.FlatShading});
 //  this.geometry = new THREE.PlaneGeometry(sfg.VIRTUAL_WIDTH, sfg.VIRTUAL_HEIGHT);
-  this.geometry = new THREE.PlaneGeometry(width, height);
+  this.geometry = new THREE.PlaneGeometry(sfg.ACTUAL_WIDTH * width / sfg.VIRTUAL_WIDTH , sfg.ACTUAL_HEIGHT *  height / sfg.VIRTUAL_HEIGHT );
+//  this.geometry = new THREE.PlaneGeometry(sfg.ACTUAL_WIDTH , sfg.ACTUAL_HEIGHT);
   this.mesh = new THREE.Mesh(this.geometry, this.material);
-  this.mesh.position.z = 0.4;
-  this.mesh.position.x = (width - sfg.VIRTUAL_WIDTH) / 2;
-  this.mesh.position.y =  - (height - sfg.VIRTUAL_HEIGHT) / 2;
+  this.mesh.position.z = 1;
+  this.mesh.position.x = (sfg.ACTUAL_WIDTH * width / sfg.VIRTUAL_WIDTH - sfg.ACTUAL_WIDTH) / 2;
+  this.mesh.position.y = - (sfg.ACTUAL_HEIGHT * height / sfg.VIRTUAL_HEIGHT - sfg.ACTUAL_HEIGHT) / 2;
   this.fonts = { font: sfg.textureFiles.font, font1: sfg.textureFiles.font1 };
   this.blinkCount = 0;
   this.blink = false;
