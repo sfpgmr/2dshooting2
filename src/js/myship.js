@@ -173,9 +173,9 @@ export class MyShip extends gameobj.GameObj {
     }
 
     if(basicInput.left && this.mesh.rotation.z < 0.4){
-      this.mesh.rotation.z += 0.01; 
+      this.mesh.rotation.z += 0.02; 
     } else if(basicInput.right && this.mesh.rotation.z > -0.4){
-      this.mesh.rotation.z -= 0.01;
+      this.mesh.rotation.z -= 0.02;
     } else if(this.mesh.rotation.z != 0){
       if(this.mesh.rotation.z < 0){
         this.mesh.rotation.z += 0.05;
