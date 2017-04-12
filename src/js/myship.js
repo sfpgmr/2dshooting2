@@ -106,14 +106,18 @@ export class MyShip extends gameobj.GameObj {
   let bbox = new THREE.Box3().setFromObject(this.mesh);
   let d = bbox.getSize();
 
-  this.width = 0;
-  this.height = 0;
+  this.bb = new THREE.BoundingBoxHelper( this.mesh, 0xffffff );
+	sfg.game.scene.add( this.bb );
+
+  
+  this.width = d.x;
+  this.height = d.y;
 
   // 移動範囲を求める
-  this.top = (sfg.V_TOP - this.height / 2) | 0;
-  this.bottom = (sfg.V_BOTTOM + this.height / 2) | 0;
-  this.left = (sfg.V_LEFT + this.width / 2) | 0;
-  this.right = (sfg.V_RIGHT - this.width / 2) | 0;
+  this.top = (sfg.V_TOP - this.height / 2) ;
+  this.bottom = (sfg.V_BOTTOM + this.height / 2);
+  this.left = (sfg.V_LEFT + this.width / 2) ;
+  this.right = (sfg.V_RIGHT - this.width / 2);
 
 
   this.mesh.position.x = this.x_;
@@ -202,7 +206,13 @@ export class MyShip extends gameobj.GameObj {
     //   basicInput.keyCheck.x = false;
     //   this.shoot(1.5 * Math.PI);
     // }
-  }
+
+    this.bb.position.x = this.mesh.position.x;
+    this.bb.position.y = this.mesh.position.y;
+    this.bb.position.z = this.mesh.position.z;
+    this.bb.rotation.y = this.mesh.rotation.z;
+}
+
   
   hit() {
     this.mesh.visible = false;

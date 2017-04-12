@@ -65,6 +65,7 @@ class sfglobal {
     this.CHECK_COLLISION = true;
     this.DEBUG = false;
     this.textureFiles = {};
+    this.models = {};
     this.stage = 0;
     this.tasks = null;
     this.gameTimer = null;

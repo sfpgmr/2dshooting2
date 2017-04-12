@@ -328,7 +328,7 @@ export class Game {
 
     this.progress = new graphics.Progress();
     this.progress.mesh.position.z = 0.001;
-    this.progress.render('Loading Resouces ...', 0);
+    this.progress.render('Loading Resources ...', 0);
     this.scene.add(this.progress.mesh);
     var loadPromise = this.audio_.readDrumSample;
     for (var n in textures) {
@@ -339,7 +339,7 @@ export class Game {
           })
           .then((tex) => {
             texCount++;
-            this.progress.render('Loading Resouces ...', (texCount / texLength * 100) | 0);
+            this.progress.render('Loading Resources ...', (texCount / texLength * 100) | 0);
             sfg.textureFiles[name] = tex;
             this.renderer.render(this.scene, this.camera);
             return Promise.resolve();
@@ -369,6 +369,33 @@ export class Game {
     
     return loadPromise;
   }
+
+loadModels(){
+  let loader = new THREE.JSONLoader();
+  this.models = {};
+  let models = {
+    'myship':'./data/test.json',
+    'ballet':'./data/ballet.json'
+  };
+  let promises = Promise.resolve(0);
+  let this_ = this;
+  for(let i in models){
+    promises = promises.then(()=>{
+      return new Promise((resolve,reject)=>{
+          loader.load(models[i], (geometry, materials) => {
+            var faceMaterial = new THREE.MultiMaterial(materials);
+            this_[i] = new THREE.Mesh(geometry, faceMaterial);
+            this_[i].rotation.set(90, 0, 0);
+            this_[i].position.set(0, 0, 0.0);
+            this_[i].scale.set(1,1,1);
+            this_.scene.add(this_[i]); // シーンへメッシュの追加
+            resolve();
+          });
+      });
+    });
+  }
+  return promises;
+}
 
 *render(taskIndex) {
   while(taskIndex >= 0){

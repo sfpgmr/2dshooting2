@@ -45,10 +45,15 @@ export function Progress() {
   this.ctx.mozImageSmoothingEnabled = false;
 
   this.material = new THREE.MeshBasicMaterial({ map: this.texture, transparent: true });
-  this.geometry = new THREE.PlaneGeometry(this.canvas.width, this.canvas.height);
+//  this.geometry = new THREE.PlaneGeometry(this.canvas.width, this.canvas.height);
+//  this.geometry = new THREE.PlaneGeometry(this.canvas.width, this.canvas.height);
+    this.geometry = new THREE.PlaneGeometry(sfg.ACTUAL_WIDTH * width / sfg.VIRTUAL_WIDTH , sfg.ACTUAL_HEIGHT *  height / sfg.VIRTUAL_HEIGHT );
   this.mesh = new THREE.Mesh(this.geometry, this.material);
-  this.mesh.position.x = (width - sfg.VIRTUAL_WIDTH) / 2;
-  this.mesh.position.y =  - (height - sfg.VIRTUAL_HEIGHT) / 2;
+  // this.mesh.position.x = (width - sfg.VIRTUAL_WIDTH) / 2;
+  // this.mesh.position.y =  - (height - sfg.VIRTUAL_HEIGHT) / 2;
+  this.mesh.position.x = (sfg.ACTUAL_WIDTH * width / sfg.VIRTUAL_WIDTH - sfg.ACTUAL_WIDTH) / 2;
+  this.mesh.position.y = - (sfg.ACTUAL_HEIGHT * height / sfg.VIRTUAL_HEIGHT - sfg.ACTUAL_HEIGHT) / 2;
+
 
   //this.texture.premultiplyAlpha = true;
 }
@@ -187,5 +192,8 @@ export function createSpriteMaterial(texture)
 //  material.
   return material;
 }
+
+
+
 
 
