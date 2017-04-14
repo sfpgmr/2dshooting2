@@ -11,24 +11,49 @@ export class MyBullet extends gameobj.GameObj {
   constructor(scene,se) {
   super(0, 0, 0);
 
-  this.collisionArea.width = 4;
-  this.collisionArea.height = 6;
-  this.speed = 8;
+  this.speed = 0.5;
   this.power = 1;
 
-  this.textureWidth = sfg.textureFiles.myship.image.width;
-  this.textureHeight = sfg.textureFiles.myship.image.height;
 
-  // メッシュの作成・表示 ///
+  this.mesh = sfg.game.meshes.bullet.clone();
+  let bbox = new THREE.Box3().setFromObject(this.mesh);
+  let d = bbox.getSize();
 
-  var material = graphics.createSpriteMaterial(sfg.textureFiles.myship);
-  var geometry = graphics.createSpriteGeometry(16);
-  graphics.createSpriteUV(geometry, sfg.textureFiles.myship, 16, 16, 1);
-  this.mesh = new THREE.Mesh(geometry, material);
+  // this.bb = new THREE.BoundingBoxHelper( this.mesh, 0xffff00 );
+	// sfg.game.scene.add( this.bb );
+
+  
+  this.width = d.x;
+  this.height = d.y;
+
+  this.collisionArea.width = d.x;
+  this.collisionArea.height = d.y;
+
+
+  // 移動範囲を求める
+  this.top = (sfg.V_TOP - this.height ) ;
+  this.bottom = (sfg.V_BOTTOM + this.height );
+  this.left = (sfg.V_LEFT + this.width ) ;
+  this.right = (sfg.V_RIGHT - this.width );
+
 
   this.mesh.position.x = this.x_;
   this.mesh.position.y = this.y_;
   this.mesh.position.z = this.z_;
+
+  // this.textureWidth = sfg.textureFiles.myship.image.width;
+  // this.textureHeight = sfg.textureFiles.myship.image.height;
+
+  // // メッシュの作成・表示 ///
+
+  // var material = graphics.createSpriteMaterial(sfg.textureFiles.myship);
+  // var geometry = graphics.createSpriteGeometry(16);
+  // graphics.createSpriteUV(geometry, sfg.textureFiles.myship, 16, 16, 1);
+  // this.mesh = new THREE.Mesh(geometry, material);
+
+  // this.mesh.position.x = this.x_;
+  // this.mesh.position.y = this.y_;
+  // this.mesh.position.z = this.z_;
   this.se = se;
   //se(0);
   //sequencer.playTracks(soundEffects.soundEffects[0]);
@@ -47,10 +72,10 @@ export class MyBullet extends gameobj.GameObj {
     
     while (taskIndex >= 0 
       && this.enable_
-      && this.y <= (sfg.V_TOP + 16) 
-      && this.y >= (sfg.V_BOTTOM - 16) 
-      && this.x <= (sfg.V_RIGHT + 16) 
-      && this.x >= (sfg.V_LEFT - 16))
+      && this.y <= this.top 
+      && this.y >= this.bottom 
+      && this.x <= this.right 
+      && this.x >= this.left)
     {
       
       this.y += this.dy;
@@ -102,7 +127,7 @@ export class MyShip extends gameobj.GameObj {
   //graphics.createSpriteUV(geometry, sfg.textureFiles.myship, this.width, this.height, 0);
 
   //this.mesh = new THREE.Mesh(geometry, material);
-  this.mesh = sfg.game.meshMyShip;
+  this.mesh = sfg.game.meshes.myship;
   let bbox = new THREE.Box3().setFromObject(this.mesh);
   let d = bbox.getSize();
 
@@ -124,13 +149,14 @@ export class MyShip extends gameobj.GameObj {
   this.mesh.position.y = this.y_;
   this.mesh.position.z = this.z_;
   this.rest = 3;
-  // this.myBullets = ( ()=> {
-  //   var arr = [];
-  //   for (var i = 0; i < 2; ++i) {
-  //     arr.push(new MyBullet(this.scene,this.se));
-  //   }
-  //   return arr;
-  // })();
+  this.myBullets = ( ()=> {
+    var arr = [];
+    for (var i = 0; i < 2; ++i) {
+      arr.push(new MyBullet(this.scene,this.se));
+    }
+    return arr;
+  })();
+
   scene.add(this.mesh);
   
   this.bulletPower = 1;
@@ -176,41 +202,41 @@ export class MyShip extends gameobj.GameObj {
       }
     }
 
-    if(basicInput.left && this.mesh.rotation.z < 0.4){
-      this.mesh.rotation.z += 0.02; 
-    } else if(basicInput.right && this.mesh.rotation.z > -0.4){
-      this.mesh.rotation.z -= 0.02;
-    } else if(this.mesh.rotation.z != 0){
-      if(this.mesh.rotation.z < 0){
-        this.mesh.rotation.z += 0.05;
-        if(this.mesh.rotation.z > 0){
-          this.mesh.rotation.z = 0;
+    if(basicInput.left && this.mesh.rotation.y > -0.4){
+      this.mesh.rotation.y -= 0.02; 
+    } else if(basicInput.right && this.mesh.rotation.y < 0.4){
+      this.mesh.rotation.y += 0.02;
+    } else if(this.mesh.rotation.y != 0 && !(basicInput.left || basicInput.right) ){
+      if(this.mesh.rotation.y < 0){
+        this.mesh.rotation.y += 0.05;
+        if(this.mesh.rotation.y > 0){
+          this.mesh.rotation.y = 0;
         }
       }
-      if(this.mesh.rotation.z > 0){
-        this.mesh.rotation.z -= 0.05;
-        if(this.mesh.rotation.z < 0){
-          this.mesh.rotation.z = 0;
+      if(this.mesh.rotation.y > 0){
+        this.mesh.rotation.y -= 0.05;
+        if(this.mesh.rotation.y < 0){
+          this.mesh.rotation.y = 0;
         }
       }
     }
 
 
 
-    // if (basicInput.z) {
-    //   basicInput.keyCheck.z = false;
-    //   this.shoot(0.5 * Math.PI);
-    // }
+    if (basicInput.z) {
+      basicInput.keyCheck.z = false;
+      this.shoot(0.5 * Math.PI);
+    }
 
-    // if (basicInput.x) {
-    //   basicInput.keyCheck.x = false;
-    //   this.shoot(1.5 * Math.PI);
-    // }
+    if (basicInput.x) {
+      basicInput.keyCheck.x = false;
+      this.shoot(1.5 * Math.PI);
+    }
 
     this.bb.position.x = this.mesh.position.x;
     this.bb.position.y = this.mesh.position.y;
     this.bb.position.z = this.mesh.position.z;
-    this.bb.rotation.y = this.mesh.rotation.z;
+    this.bb.rotation.y = this.mesh.rotation.y;
 }
 
   

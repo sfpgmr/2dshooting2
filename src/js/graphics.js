@@ -53,13 +53,15 @@ export function Progress() {
   // this.mesh.position.y =  - (height - sfg.VIRTUAL_HEIGHT) / 2;
   this.mesh.position.x = (sfg.ACTUAL_WIDTH * width / sfg.VIRTUAL_WIDTH - sfg.ACTUAL_WIDTH) / 2;
   this.mesh.position.y = - (sfg.ACTUAL_HEIGHT * height / sfg.VIRTUAL_HEIGHT - sfg.ACTUAL_HEIGHT) / 2;
-
+  this.percent = 0;
 
   //this.texture.premultiplyAlpha = true;
 }
 
 /// プログレスバーを表示する。
 Progress.prototype.render = function (message, percent) {
+  percent = percent > 100 ? 100:percent;
+  this.percent = percent;
   var ctx = this.ctx;
   var width = this.canvas.width, height = this.canvas.height;
   //      ctx.fillStyle = 'rgba(0,0,0,0)';

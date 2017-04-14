@@ -324,12 +324,14 @@ export class Game {
     }
 
     var texLength = Object.keys(textures).length;
-    var texCount = 0;
+    var percent = 10;
 
     this.progress = new graphics.Progress();
     this.progress.mesh.position.z = 0.001;
-    this.progress.render('Loading Resources ...', 0);
+    this.progress.render('Loading Resources ...', percent);
     this.scene.add(this.progress.mesh);
+    this.renderer.render(this.scene, this.camera);
+
     var loadPromise = this.audio_.readDrumSample;
     for (var n in textures) {
       ((name, texPath) => {
@@ -338,8 +340,8 @@ export class Game {
             return loadTexture(sfg.resourceBase + texPath);
           })
           .then((tex) => {
-            texCount++;
-            this.progress.render('Loading Resources ...', (texCount / texLength * 100) | 0);
+            percent += 10; 
+            this.progress.render('Loading Resources ...', percent);
             sfg.textureFiles[name] = tex;
             this.renderer.render(this.scene, this.camera);
             return Promise.resolve();
@@ -349,46 +351,52 @@ export class Game {
 
     let self = this;
 
-    loadPromise = loadPromise.then(()=>{
-      return new Promise((resolve,reject)=>{
-        var json = './data/test.json';// jsonパスの指定
-          // jsonファイルの読み込み
-          var loader = new THREE.JSONLoader();
-          loader.load(json, (geometry, materials) => {
-            var faceMaterial = new THREE.MultiMaterial(materials);
-            self.meshMyShip = new THREE.Mesh(geometry, faceMaterial);
-            self.meshMyShip.rotation.set(90, 0, 0);
-            self.meshMyShip.position.set(0, 0, 0.0);
-            self.meshMyShip.scale.set(1,1,1);
-            self.scene.add(self.meshMyShip); // シーンへメッシュの追加
-            resolve();
-          });
-      })
-    });
+    // loadPromise = loadPromise.then(()=>{
+    //   return new Promise((resolve,reject)=>{
+    //     var json = './data/test.json';// jsonパスの指定
+    //       // jsonファイルの読み込み
+    //       var loader = new THREE.JSONLoader();
+    //       loader.load(json, (geometry, materials) => {
+    //         var faceMaterial = new THREE.MultiMaterial(materials);
+    //         self.meshMyShip = new THREE.Mesh(geometry, faceMaterial);
+    //         self.meshMyShip.rotation.set(90, 0, 0);
+    //         self.meshMyShip.position.set(0, 0, 0.0);
+    //         self.meshMyShip.scale.set(1,1,1);
+    //         self.scene.add(self.meshMyShip); // シーンへメッシュの追加
+    //         resolve();
+    //       });
+    //   })
+    // });
 
+    loadPromise = loadPromise.then(this.loadModels.bind(this));
     
     return loadPromise;
   }
 
 loadModels(){
   let loader = new THREE.JSONLoader();
-  this.models = {};
-  let models = {
-    'myship':'./data/test.json',
-    'ballet':'./data/ballet.json'
+  this.meshes = {};
+  let meshes = {
+    'myship':'./data/myship.json',
+    'bullet':'./data/bullet.json'
   };
   let promises = Promise.resolve(0);
+  let meshes_ = this.meshes;
   let this_ = this;
-  for(let i in models){
+  for(let i in meshes){
     promises = promises.then(()=>{
       return new Promise((resolve,reject)=>{
-          loader.load(models[i], (geometry, materials) => {
+          loader.load(meshes[i], (geometry, materials) => {
             var faceMaterial = new THREE.MultiMaterial(materials);
-            this_[i] = new THREE.Mesh(geometry, faceMaterial);
-            this_[i].rotation.set(90, 0, 0);
-            this_[i].position.set(0, 0, 0.0);
-            this_[i].scale.set(1,1,1);
-            this_.scene.add(this_[i]); // シーンへメッシュの追加
+            meshes_[i] = new THREE.Mesh(geometry, faceMaterial);
+            meshes_[i].rotation.set(0, 0, 0);
+            meshes_[i].position.set(0, 0, 0.0);
+            meshes_[i].scale.set(1,1,1);
+            let percent = this_.progress.percent + 10;
+            this.progress.render('Loading Resources ...', percent);
+            this.renderer.render(this.scene, this.camera);
+            
+            //this_.scene.add(meshes_[i]); // シーンへメッシュの追加
             resolve();
           });
       });
