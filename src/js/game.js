@@ -208,7 +208,7 @@ export class Game {
     light.position.set(0.577, 0.577, 0.577);
     this.scene.add(light);
 
-    var ambient = new THREE.AmbientLight(0xc0c0c0);
+    var ambient = new THREE.AmbientLight(0x808080);
     this.scene.add(ambient);
     renderer.clear();
   }
@@ -349,25 +349,6 @@ export class Game {
       })(n, textures[n]);
     }
 
-    let self = this;
-
-    // loadPromise = loadPromise.then(()=>{
-    //   return new Promise((resolve,reject)=>{
-    //     var json = './data/test.json';// jsonパスの指定
-    //       // jsonファイルの読み込み
-    //       var loader = new THREE.JSONLoader();
-    //       loader.load(json, (geometry, materials) => {
-    //         var faceMaterial = new THREE.MultiMaterial(materials);
-    //         self.meshMyShip = new THREE.Mesh(geometry, faceMaterial);
-    //         self.meshMyShip.rotation.set(90, 0, 0);
-    //         self.meshMyShip.position.set(0, 0, 0.0);
-    //         self.meshMyShip.scale.set(1,1,1);
-    //         self.scene.add(self.meshMyShip); // シーンへメッシュの追加
-    //         resolve();
-    //       });
-    //   })
-    // });
-
     loadPromise = loadPromise.then(this.loadModels.bind(this));
     
     return loadPromise;
@@ -378,7 +359,8 @@ loadModels(){
   this.meshes = {};
   let meshes = {
     'myship':'./data/myship.json',
-    'bullet':'./data/bullet.json'
+    'bullet':'./data/bullet.json',
+    'building':'./data/building.json'
   };
   let promises = Promise.resolve(0);
   let meshes_ = this.meshes;
@@ -427,6 +409,25 @@ initActors()
   this.myship_ = this.myship_ || new myship.MyShip(0, -100, 0.1, this.scene, this.se.bind(this));
   sfg.myship_ = this.myship_;
   this.myship_.mesh.visible = false;
+
+  // 背景描画のテスト
+  this.meshes.building.position.z = -350.0;
+  this.meshes.building.position.y = 60.0;
+
+  this.backgrounds = [{mesh:this.meshes.building.clone()},{mesh:this.meshes.building.clone()}];
+  let bks = this.backgrounds;
+  bks.forEach((b)=>{
+   b.bbox = new THREE.Box3().setFromObject(b.mesh);
+   b.size = b.bbox.getSize();
+  });
+  
+  bks[0].mesh.position.y = 0;
+  bks[1].mesh.position.y = bks[0].size.y;
+
+  this.scene.add(this.backgrounds[0].mesh);
+  this.scene.add(this.backgrounds[1].mesh);
+
+
 
   //this.spaceField = null;
   return Promise.all(promises);
@@ -879,6 +880,17 @@ se(index) {
     this.printScore();
     sfg.myship_.action(this.basicInput);
     sfg.gameTimer.update();
+    // 背景スクロールテスト
+    this.backgrounds.forEach((b,i)=>{
+        b.mesh.position.y -= 0.25;
+        if(b.mesh.position.y < -200.0){
+          --i;
+          if(i < 0) i = 1;
+          let before = this.backgrounds[i];
+          b.mesh.position.y = before.mesh.position.y + before.size.y;
+        }
+    });
+
     //console.log(sfg.gameTimer.elapsedTime);
     //this.enemies.move();
 

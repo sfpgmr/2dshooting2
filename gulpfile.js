@@ -216,7 +216,11 @@ gulp.task('devapp',()=>{
   gulp.src('./src/app/*.js').pipe(gulp.dest('./dist/app'));
 });
 
-gulp.task('default',['html','devhtml','js','devjs','res','data','postcss','devapp','browser-sync'],function(){
+gulp.task('assets',()=>{
+  gulp.src('./src/assets/*.json').pipe(gulp.dest('./src/data'));
+});
+
+gulp.task('default',['html','devhtml','js','devjs','res','data','postcss','devapp','browser-sync','assets'],()=>{
     watch('./src/js/**/*.js',()=>gulp.start(['js'],['devjs']));
     watch('./src/html/*.html',()=>gulp.start(['html']));
     watch('./src/data/**/*.json',()=>gulp.start(['data']));
@@ -225,5 +229,6 @@ gulp.task('default',['html','devhtml','js','devjs','res','data','postcss','devap
     watch('./src/app/js/*.js',()=>gulp.start(['devjs']));
     watch('./src/app/*.js',()=>gulp.start(['devapp']));
     watch('./src/app/html/*.html',()=>gulp.start(['devhtml']));
+    watch('./src/assets/*.json',()=>gulp.start(['assets']));
 });
 }();

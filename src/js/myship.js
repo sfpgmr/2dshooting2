@@ -131,8 +131,8 @@ export class MyShip extends gameobj.GameObj {
   let bbox = new THREE.Box3().setFromObject(this.mesh);
   let d = bbox.getSize();
 
-  this.bb = new THREE.BoundingBoxHelper( this.mesh, 0xffffff );
-	sfg.game.scene.add( this.bb );
+  //this.bb = new THREE.BoxHelper( this.mesh, 0xffffff );
+	//sfg.game.scene.add( this.bb );
 
   
   this.width = d.x;
@@ -233,10 +233,10 @@ export class MyShip extends gameobj.GameObj {
       this.shoot(1.5 * Math.PI);
     }
 
-    this.bb.position.x = this.mesh.position.x;
-    this.bb.position.y = this.mesh.position.y;
-    this.bb.position.z = this.mesh.position.z;
-    this.bb.rotation.y = this.mesh.rotation.y;
+    // this.bb.position.x = this.mesh.position.x;
+    // this.bb.position.y = this.mesh.position.y;
+    // this.bb.position.z = this.mesh.position.z;
+    // this.bb.rotation.y = this.mesh.rotation.y;
 }
 
   
