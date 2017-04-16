@@ -14,6 +14,7 @@ import * as myship from './myship.js';
 //import * as effectobj from './effectobj.js';
 import EventEmitter from './eventEmitter3.js';
 import {seqData,soundEffectData} from './seqData.js';
+import SFCrtShaderPass from './sfCrtShaderPass.js';
 
 
 class ScoreEntry {
@@ -129,7 +130,8 @@ export class Game {
     this.loadResources()
       .then(() => {
         this.scene.remove(this.progress.mesh);
-        this.renderer.render(this.scene, this.camera);
+        //this.renderer.render(this.scene, this.camera);
+        this.composer.render();
         this.tasks.clear();
         this.tasks.pushTask(this.basicInput.update.bind(this.basicInput));
         this.tasks.pushTask(this.init.bind(this));
@@ -193,6 +195,7 @@ export class Game {
     window.addEventListener('resize', () => {
       this.calcScreenSize();
       renderer.setSize(this.CONSOLE_WIDTH, this.CONSOLE_HEIGHT);
+      this.composer.setSize(this.CONSOLE_WIDTH, this.CONSOLE_HEIGHT);
     });
 
     // シーンの作成
@@ -211,6 +214,23 @@ export class Game {
     var ambient = new THREE.AmbientLight(0x808080);
     this.scene.add(ambient);
     renderer.clear();
+
+//    this.composer = new THREE.Effec
+    this.composer = new THREE.EffectComposer(this.renderer);
+    this.composer.setSize(this.CONSOLE_WIDTH, this.CONSOLE_HEIGHT);
+
+    this.renderPass = new THREE.RenderPass(this.scene, this.camera);
+    this.renderPass.enabled = true;
+    this.renderPass.renderToScreen = false;
+    this.composer.addPass(this.renderPass);
+
+
+    this.crtShaderPass = new SFCrtShaderPass(this.CONSOLE_WIDTH,this.CONSOLE_HEIGHT);
+    this.crtShaderPass.enbled = true;
+    this.crtShaderPass.renderToScreen = true;
+    this.composer.addPass(this.crtShaderPass);
+
+
   }
 
   /// エラーで終了する。
@@ -330,7 +350,8 @@ export class Game {
     this.progress.mesh.position.z = 0.001;
     this.progress.render('Loading Resources ...', percent);
     this.scene.add(this.progress.mesh);
-    this.renderer.render(this.scene, this.camera);
+    //this.renderer.render(this.scene, this.camera);
+    this.composer.render();
 
     var loadPromise = this.audio_.readDrumSample;
     for (var n in textures) {
@@ -343,7 +364,8 @@ export class Game {
             percent += 10; 
             this.progress.render('Loading Resources ...', percent);
             sfg.textureFiles[name] = tex;
-            this.renderer.render(this.scene, this.camera);
+            //this.renderer.render(this.scene, this.camera);
+            this.composer.render();
             return Promise.resolve();
           });
       })(n, textures[n]);
@@ -376,8 +398,9 @@ loadModels(){
             meshes_[i].scale.set(1,1,1);
             let percent = this_.progress.percent + 10;
             this.progress.render('Loading Resources ...', percent);
-            this.renderer.render(this.scene, this.camera);
-            
+            //this.renderer.render(this.scene, this.camera);
+            this.composer.render();
+
             //this_.scene.add(meshes_[i]); // シーンへメッシュの追加
             resolve();
           });
@@ -389,7 +412,9 @@ loadModels(){
 
 *render(taskIndex) {
   while(taskIndex >= 0){
-    this.renderer.render(this.scene, this.camera);
+   // this.crtShaderPass.uniforms.time.value += 0.01;
+    this.composer.render();
+//    this.renderer.render(this.scene, this.camera);
     this.textPlane.render();
     this.stats && this.stats.update();
     taskIndex = yield;
